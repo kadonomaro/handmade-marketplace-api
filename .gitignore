@@ -2,7 +2,7 @@
 /dist
 /node_modules
 
-src/server.config.ts
+.settings.env
 
 # Logs
 logs
