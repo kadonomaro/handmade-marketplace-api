@@ -2,6 +2,7 @@ export class CreateProductDto {
   readonly title: string;
   readonly description: string;
   readonly price: number;
+  readonly amount: number;
   readonly category_ids: [];
   readonly image: {
     preview_image: string;

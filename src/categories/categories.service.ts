@@ -16,7 +16,7 @@ export class CategoriesService {
   }
 
   async getById(id: string): Promise<Category> {
-    return this.categoryModel.findById(id);
+    return this.categoryModel.findById(id).populate('products');
   }
 
   async create(categoryDto: CreateCategoryDto): Promise<Category> {

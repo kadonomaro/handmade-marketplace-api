@@ -21,17 +21,17 @@ export class Category {
 
   @Prop(
     raw({
-      preview_image: { type: String },
-      detail_image: { type: String },
+      preview_image: { type: String, default: '' },
+      detail_image: { type: String, default: '' },
     }),
   )
   image: Record<string, any>;
 
   @Prop(
     raw({
-      title: { type: String },
-      description: { type: String },
-      slug: { type: String },
+      title: { type: String, default: '' },
+      description: { type: String, default: '' },
+      slug: { type: String, default: '' },
     }),
   )
   seo: Record<string, any>;
