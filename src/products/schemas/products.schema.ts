@@ -1,21 +1,23 @@
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
+import * as mongoose from 'mongoose';
 import { Document } from 'mongoose';
+import { Category } from '../../categories/schemas/categories.schema';
 
-export type CategoryDocument = Category & Document;
+export type ProductDocument = Product & Document;
 
 @Schema()
-export class Category {
+export class Product {
   @Prop({ required: true })
-  name: string;
-
-  @Prop({ required: true })
-  display_name: string;
+  title: string;
 
   @Prop()
   description: string;
 
-  @Prop()
-  products: [];
+  @Prop({ required: true })
+  price: number;
+
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }] })
+  category_ids: Category[];
 
   @Prop(
     raw({
@@ -35,4 +37,4 @@ export class Category {
   seo: Record<string, any>;
 }
 
-export const CategorySchema = SchemaFactory.createForClass(Category);
+export const ProductSchema = SchemaFactory.createForClass(Product);

@@ -10,7 +10,7 @@ import {
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CategoriesService } from './categories.service';
-import { Category } from './schemas/categories.shema';
+import { Category } from './schemas/categories.schema';
 
 @Controller('api/categories')
 export class CategoriesController {

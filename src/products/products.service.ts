@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Product, ProductDocument } from './schemas/products.shema';
+import { Product, ProductDocument } from './schemas/products.schema';
 
 @Injectable()
 export class ProductsService {
@@ -12,7 +12,7 @@ export class ProductsService {
   ) {}
 
   async getAll(): Promise<Product[]> {
-    return this.productModel.find().exec();
+    return this.productModel.find().populate('category_ids').exec();
   }
 
   async getById(id: string): Promise<Product> {

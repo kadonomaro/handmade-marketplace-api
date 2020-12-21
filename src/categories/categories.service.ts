@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { Category, CategoryDocument } from './schemas/categories.shema';
+import { Category, CategoryDocument } from './schemas/categories.schema';
 
 @Injectable()
 export class CategoriesService {
@@ -12,7 +12,7 @@ export class CategoriesService {
   ) {}
 
   async getAll(): Promise<Category[]> {
-    return this.categoryModel.find().exec();
+    return this.categoryModel.find().populate('products').exec();
   }
 
   async getById(id: string): Promise<Category> {
