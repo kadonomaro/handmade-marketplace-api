@@ -1,34 +1,45 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
-import { Category, CategoryDocument } from './schemas/categories.schema';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Category } from './category.entity';
 
 @Injectable()
 export class CategoriesService {
   constructor(
-    @InjectModel(Category.name) private categoryModel: Model<CategoryDocument>,
+    @InjectRepository(Category)
+    private categoriesRepository: Repository<Category>,
   ) {}
 
   async getAll(): Promise<Category[]> {
-    return this.categoryModel.find().populate('products').exec();
+    return await this.categoriesRepository.find();
   }
 
-  async getById(id: string): Promise<Category> {
-    return this.categoryModel.findById(id).populate('products');
+  async getById(_id: string): Promise<Category> {
+    return await this.categoriesRepository.findOne({ where: [{ id: _id }] });
   }
 
-  async create(categoryDto: CreateCategoryDto): Promise<Category> {
-    const newCategory = new this.categoryModel(categoryDto);
-    return newCategory.save();
+  async create(category: Category): Promise<Category> {
+    return await this.categoriesRepository.save(category);
   }
 
-  async update(id: string, categoryDto: UpdateCategoryDto): Promise<Category> {
-    return this.categoryModel.findByIdAndUpdate(id, categoryDto, { new: true });
+  async update(_id: string, category: Category): Promise<Category> {
+    const updatedCategory = await this.categoriesRepository.findOne(_id);
+    if (!updatedCategory) {
+      throw new NotFoundException('Category is not found');
+    }
+    updatedCategory.name = category.name;
+    updatedCategory.display_name = category.display_name;
+    updatedCategory.description = category.description;
+    updatedCategory.preview_image = category.preview_image;
+    updatedCategory.detail_image = category.detail_image;
+    updatedCategory.seo_title = category.seo_title;
+    updatedCategory.seo_description = category.seo_description;
+    updatedCategory.seo_slug = category.seo_slug;
+    return await updatedCategory.save();
   }
 
-  async remove(id: string): Promise<Category> {
-    return this.categoryModel.findByIdAndRemove(id);
+  async remove(_id: string): Promise<Category> {
+    const removedProduct = await this.categoriesRepository.findOne(_id);
+    return await this.categoriesRepository.remove(removedProduct);
   }
 }

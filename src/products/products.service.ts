@@ -1,34 +1,45 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
-import { Product, ProductDocument } from './schemas/products.schema';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Product } from './product.entity';
 
 @Injectable()
 export class ProductsService {
   constructor(
-    @InjectModel(Product.name) private productModel: Model<ProductDocument>,
+    @InjectRepository(Product) private productsRepository: Repository<Product>,
   ) {}
 
   async getAll(): Promise<Product[]> {
-    return this.productModel.find().populate('category_ids').exec();
+    return await this.productsRepository.find();
   }
 
-  async getById(id: string): Promise<Product> {
-    return this.productModel.findById(id);
+  async getById(_id: string): Promise<Product> {
+    return await this.productsRepository.findOne({ where: [{ id: _id }] });
   }
 
-  async create(productDto: CreateProductDto): Promise<Product> {
-    const newProduct = new this.productModel(productDto);
-    return newProduct.save();
+  async create(product: Product): Promise<Product> {
+    return await this.productsRepository.save(product);
   }
 
-  async update(id: string, productDto: UpdateProductDto): Promise<Product> {
-    return this.productModel.findByIdAndUpdate(id, productDto, { new: true });
+  async update(_id: string, product: Product): Promise<Product> {
+    const updatedProduct = await this.productsRepository.findOne(_id);
+    if (!updatedProduct) {
+      throw new NotFoundException('Product is not found');
+    }
+    updatedProduct.title = product.title;
+    updatedProduct.description = product.description;
+    updatedProduct.amount = product.amount;
+    updatedProduct.price = product.price;
+    updatedProduct.preview_image = product.preview_image;
+    updatedProduct.detail_image = product.detail_image;
+    updatedProduct.seo_title = product.seo_title;
+    updatedProduct.seo_description = product.seo_description;
+    updatedProduct.seo_slug = product.seo_slug;
+    return await updatedProduct.save();
   }
 
-  async remove(id: string): Promise<Product> {
-    return this.productModel.findByIdAndRemove(id);
+  async remove(_id: string): Promise<Product> {
+    const removedProduct = await this.productsRepository.findOne(_id);
+    return await this.productsRepository.remove(removedProduct);
   }
 }
