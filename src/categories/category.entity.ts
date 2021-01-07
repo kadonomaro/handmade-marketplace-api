@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  BaseEntity,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
+import { Product } from '../products/product.entity';
 
 @Entity()
 export class Category extends BaseEntity {
@@ -28,4 +36,8 @@ export class Category extends BaseEntity {
 
   @Column()
   seo_slug: string;
+
+  @ManyToMany(() => Product, (products: Product) => products.categories)
+  @JoinTable()
+  products: Product[];
 }
