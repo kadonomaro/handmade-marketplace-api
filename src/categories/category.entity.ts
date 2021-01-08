@@ -4,22 +4,23 @@ import {
   PrimaryGeneratedColumn,
   BaseEntity,
   ManyToMany,
-  JoinTable,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Product } from '../products/product.entity';
 
 @Entity()
 export class Category extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: number | string;
 
-  @Column()
-  name: string;
+  @Column({ unique: true })
+  slug: string;
 
   @Column()
   display_name: string;
 
-  @Column()
+  @Column({ type: 'text' })
   description: string;
 
   @Column()
@@ -34,13 +35,10 @@ export class Category extends BaseEntity {
   @Column()
   seo_description: string;
 
-  @Column()
-  seo_slug: string;
-
-  @Column({ type: 'datetime' })
+  @CreateDateColumn({ update: false })
   created_at: Date;
 
-  @Column({ type: 'datetime' })
+  @UpdateDateColumn({ update: false })
   updated_at: Date;
 
   @ManyToMany(() => Product, (products: Product) => products.categories)

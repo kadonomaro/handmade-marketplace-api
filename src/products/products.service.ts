@@ -32,6 +32,7 @@ export class ProductsService {
 
   async create(product: Product): Promise<Product> {
     try {
+      product.slug = product.slug || (+new Date()).toString(36);
       product.created_at = new Date();
       return await this.productsRepository.save(product);
     } catch (error) {
@@ -45,6 +46,7 @@ export class ProductsService {
       if (!updatedProduct) {
         throw new NotFoundException(`Product with id=${_id} is not found`);
       }
+      updatedProduct.slug = product.slug;
       updatedProduct.title = product.title;
       updatedProduct.description = product.description;
       updatedProduct.amount = product.amount;
@@ -53,7 +55,6 @@ export class ProductsService {
       updatedProduct.detail_image = product.detail_image;
       updatedProduct.seo_title = product.seo_title;
       updatedProduct.seo_description = product.seo_description;
-      updatedProduct.seo_slug = product.seo_slug;
       updatedProduct.updated_at = new Date();
       updatedProduct.categories = product.categories;
       return await updatedProduct.save();

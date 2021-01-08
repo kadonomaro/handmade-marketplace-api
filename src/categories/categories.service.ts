@@ -31,6 +31,7 @@ export class CategoriesService {
 
   async create(category: Category): Promise<Category> {
     try {
+      category.slug = category.slug || (+new Date()).toString(36);
       category.created_at = new Date();
       return await this.categoriesRepository.save(category);
     } catch (error) {
@@ -44,14 +45,13 @@ export class CategoriesService {
       if (!updatedCategory) {
         throw new NotFoundException('Category is not found');
       }
-      updatedCategory.name = category.name;
+      updatedCategory.slug = category.slug;
       updatedCategory.display_name = category.display_name;
       updatedCategory.description = category.description;
       updatedCategory.preview_image = category.preview_image;
       updatedCategory.detail_image = category.detail_image;
       updatedCategory.seo_title = category.seo_title;
       updatedCategory.seo_description = category.seo_description;
-      updatedCategory.seo_slug = category.seo_slug;
       updatedCategory.products = category.products;
       updatedCategory.updated_at = new Date();
       return await updatedCategory.save();
