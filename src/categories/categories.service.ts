@@ -30,6 +30,7 @@ export class CategoriesService {
 
   async create(category: Category): Promise<Category> {
     try {
+      category.created_at = new Date();
       return await this.categoriesRepository.save(category);
     } catch (error) {
       console.error(error);
@@ -50,6 +51,7 @@ export class CategoriesService {
       updatedCategory.seo_title = category.seo_title;
       updatedCategory.seo_description = category.seo_description;
       updatedCategory.seo_slug = category.seo_slug;
+      updatedCategory.updated_at = new Date();
       return await updatedCategory.save();
     } catch (error) {
       console.error(error);

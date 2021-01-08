@@ -18,6 +18,7 @@ export class ProductsService {
   }
 
   async create(product: Product): Promise<Product> {
+    product.created_at = new Date();
     return await this.productsRepository.save(product);
   }
 
@@ -35,6 +36,7 @@ export class ProductsService {
     updatedProduct.seo_title = product.seo_title;
     updatedProduct.seo_description = product.seo_description;
     updatedProduct.seo_slug = product.seo_slug;
+    updatedProduct.updated_at = new Date();
     return await updatedProduct.save();
   }
 

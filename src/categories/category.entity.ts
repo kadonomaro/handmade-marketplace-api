@@ -37,6 +37,12 @@ export class Category extends BaseEntity {
   @Column()
   seo_slug: string;
 
+  @Column({ type: 'datetime' })
+  created_at: Date;
+
+  @Column({ type: 'datetime' })
+  updated_at: Date;
+
   @ManyToMany(() => Product, (products: Product) => products.categories)
   @JoinTable()
   products: Product[];
