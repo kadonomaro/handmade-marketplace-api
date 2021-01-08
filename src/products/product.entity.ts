@@ -46,7 +46,9 @@ export class Product extends BaseEntity {
   @Column({ type: 'datetime' })
   updated_at: Date;
 
-  @ManyToMany(() => Category, (categories: Category) => categories.products)
+  @ManyToMany(() => Category, (categories: Category) => categories.products, {
+    cascade: true,
+  })
   @JoinTable()
   categories: Category[];
 }

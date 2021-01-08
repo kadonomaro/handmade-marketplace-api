@@ -10,11 +10,14 @@ export class ProductsService {
   ) {}
 
   async getAll(): Promise<Product[]> {
-    return await this.productsRepository.find();
+    return await this.productsRepository.find({ relations: ['categories'] });
   }
 
   async getById(_id: string): Promise<Product> {
-    return await this.productsRepository.findOne({ where: [{ id: _id }] });
+    return await this.productsRepository.findOne({
+      where: [{ id: _id }],
+      relations: ['categories'],
+    });
   }
 
   async create(product: Product): Promise<Product> {
@@ -37,6 +40,7 @@ export class ProductsService {
     updatedProduct.seo_description = product.seo_description;
     updatedProduct.seo_slug = product.seo_slug;
     updatedProduct.updated_at = new Date();
+    updatedProduct.categories = product.categories;
     return await updatedProduct.save();
   }
 

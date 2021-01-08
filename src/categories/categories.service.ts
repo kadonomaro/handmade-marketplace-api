@@ -12,7 +12,7 @@ export class CategoriesService {
 
   async getAll(): Promise<Category[]> {
     try {
-      return await this.categoriesRepository.find();
+      return await this.categoriesRepository.find({ relations: ['products'] });
     } catch (error) {
       console.error(error);
     }
@@ -22,6 +22,7 @@ export class CategoriesService {
     try {
       return await this.categoriesRepository.findOne({
         where: [{ id: _id }],
+        relations: ['products'],
       });
     } catch (error) {
       console.error(error);
@@ -51,6 +52,7 @@ export class CategoriesService {
       updatedCategory.seo_title = category.seo_title;
       updatedCategory.seo_description = category.seo_description;
       updatedCategory.seo_slug = category.seo_slug;
+      updatedCategory.products = category.products;
       updatedCategory.updated_at = new Date();
       return await updatedCategory.save();
     } catch (error) {
