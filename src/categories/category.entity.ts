@@ -44,6 +44,5 @@ export class Category extends BaseEntity {
   updated_at: Date;
 
   @ManyToMany(() => Product, (products: Product) => products.categories)
-  // @JoinTable()
   products: Product[];
 }

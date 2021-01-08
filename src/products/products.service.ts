@@ -10,42 +10,67 @@ export class ProductsService {
   ) {}
 
   async getAll(): Promise<Product[]> {
-    return await this.productsRepository.find({ relations: ['categories'] });
+    try {
+      return await this.productsRepository.find({
+        relations: ['categories'],
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async getById(_id: string): Promise<Product> {
-    return await this.productsRepository.findOne({
-      where: [{ id: _id }],
-      relations: ['categories'],
-    });
+    try {
+      return await this.productsRepository.findOne({
+        where: [{ id: _id }],
+        relations: ['categories'],
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async create(product: Product): Promise<Product> {
-    product.created_at = new Date();
-    return await this.productsRepository.save(product);
+    try {
+      product.created_at = new Date();
+      return await this.productsRepository.save(product);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async update(_id: string, product: Product): Promise<Product> {
-    const updatedProduct = await this.productsRepository.findOne(_id);
-    if (!updatedProduct) {
-      throw new NotFoundException('Product is not found');
+    try {
+      const updatedProduct = await this.productsRepository.findOne(_id);
+      if (!updatedProduct) {
+        throw new NotFoundException(`Product with id=${_id} is not found`);
+      }
+      updatedProduct.title = product.title;
+      updatedProduct.description = product.description;
+      updatedProduct.amount = product.amount;
+      updatedProduct.price = product.price;
+      updatedProduct.preview_image = product.preview_image;
+      updatedProduct.detail_image = product.detail_image;
+      updatedProduct.seo_title = product.seo_title;
+      updatedProduct.seo_description = product.seo_description;
+      updatedProduct.seo_slug = product.seo_slug;
+      updatedProduct.updated_at = new Date();
+      updatedProduct.categories = product.categories;
+      return await updatedProduct.save();
+    } catch (error) {
+      console.error(error);
     }
-    updatedProduct.title = product.title;
-    updatedProduct.description = product.description;
-    updatedProduct.amount = product.amount;
-    updatedProduct.price = product.price;
-    updatedProduct.preview_image = product.preview_image;
-    updatedProduct.detail_image = product.detail_image;
-    updatedProduct.seo_title = product.seo_title;
-    updatedProduct.seo_description = product.seo_description;
-    updatedProduct.seo_slug = product.seo_slug;
-    updatedProduct.updated_at = new Date();
-    updatedProduct.categories = product.categories;
-    return await updatedProduct.save();
   }
 
   async remove(_id: string): Promise<Product> {
-    const removedProduct = await this.productsRepository.findOne(_id);
-    return await this.productsRepository.remove(removedProduct);
+    try {
+      const removedProduct = await this.productsRepository.findOne(_id);
+      if (!removedProduct) {
+        throw new NotFoundException(`Product with id=${_id} is not found`);
+      }
+      return await this.productsRepository.remove(removedProduct);
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
