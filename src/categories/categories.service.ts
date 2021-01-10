@@ -49,6 +49,9 @@ export class CategoriesService {
         throw new NotFoundException('Category is not found');
       }
       updatedCategory.slug = category.slug;
+      updatedCategory.active = category.active;
+      updatedCategory.sort = category.sort;
+      updatedCategory.show_on_main = category.show_on_main;
       updatedCategory.display_name = category.display_name;
       updatedCategory.description = category.description;
       updatedCategory.preview_image = category.preview_image;

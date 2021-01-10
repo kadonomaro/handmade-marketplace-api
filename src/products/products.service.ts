@@ -48,6 +48,8 @@ export class ProductsService {
         throw new NotFoundException(`Product with id=${_id} is not found`);
       }
       updatedProduct.slug = product.slug;
+      updatedProduct.active = product.active;
+      updatedProduct.sort = product.sort;
       updatedProduct.title = product.title;
       updatedProduct.description = product.description;
       updatedProduct.amount = product.amount;
