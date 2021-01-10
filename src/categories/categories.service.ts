@@ -12,7 +12,10 @@ export class CategoriesService {
 
   async getAll(): Promise<Category[]> {
     try {
-      return await this.categoriesRepository.find({ relations: ['products'] });
+      return await this.categoriesRepository.find({
+        relations: ['products'],
+        order: { sort: 'ASC' },
+      });
     } catch (error) {
       console.error(error);
     }

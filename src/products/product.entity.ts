@@ -18,6 +18,12 @@ export class Product extends BaseEntity {
   @Column({ unique: true })
   slug: string;
 
+  @Column({ default: true })
+  active: boolean;
+
+  @Column({ default: 100 })
+  sort: number;
+
   @Column()
   title: string;
 

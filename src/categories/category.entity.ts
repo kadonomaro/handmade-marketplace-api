@@ -17,6 +17,15 @@ export class Category extends BaseEntity {
   @Column({ unique: true })
   slug: string;
 
+  @Column({ default: true })
+  active: boolean;
+
+  @Column({ default: 100 })
+  sort: number;
+
+  @Column({ default: false })
+  show_on_main: boolean;
+
   @Column()
   display_name: string;
 

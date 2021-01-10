@@ -13,6 +13,7 @@ export class ProductsService {
     try {
       return await this.productsRepository.find({
         relations: ['categories'],
+        order: { sort: 'ASC' },
       });
     } catch (error) {
       console.error(error);
